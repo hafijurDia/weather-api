@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input type="text" id="inputCity" class="form-control" placeholder="Enter a location for Weather ..." />
+                <div class="input-group-append">
+                    <button type="button" id="searchBtn" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="iconSrc" src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 id="cityName">Dhaka</h1>
+            <h3><span id="tempareture">38.06</span>&deg;C</h3>
+            <h1 class="lead" id="weather">Clouds</h1>
+        </div>
+    </div>
+
+<script>
+    
+    document.querySelector('#searchBtn').addEventListener('click', function(){
+        const inputCity = document.getElementById('inputCity').value;
+        catchCity(inputCity)
+    })
+
+    function catchCity(cityNa){
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityNa}&appid=f1b08c9cd310557194e554d13087275c`)
+        .then(response => response.json())
+        .then(json => displayWeather(json,cityNa))
+        
+    }
+
+    function displayWeather(weatherInfo,cityName){
+        //document.getElementById('cityName').innerHTML = cityName; //can be catch city in this way//
+        document.getElementById('cityName').innerHTML = weatherInfo.name; //this catch by api
+        document.getElementById('tempareture').innerHTML = (weatherInfo.main.temp - 273.15).toFixed(3);
+        document.getElementById('weather').innerHTML = weatherInfo.weather[0].main;
+
+        let iconcode = weatherInfo.weather[0].icon;
+        let iconurl = `https://openweathermap.org/img/wn/${iconcode}@2x.png`;
+        document.getElementById('iconSrc').setAttribute('src', iconurl);
+
+        console.log(weatherInfo);
+    }
+</script>
+
+</body>
+
+</html>
